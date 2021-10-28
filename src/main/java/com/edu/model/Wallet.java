@@ -1,12 +1,23 @@
 package com.edu.model;
 
-import java.util.HashMap;
+import com.edu.interfaces.Converter;
+
+import java.util.*;
 
 public class Wallet {
     private HashMap<String, Summary> money;
+    private Converter bank;
 
     public Wallet() {
+        bank = new Bank();
+        bank.addCurrency("RUB");
+        bank.addCurrency("USD");
         money = new HashMap<>();
+    }
+
+    public Wallet(Converter converter) {
+        money = new HashMap<>();
+        bank = converter;
     }
 
     public void addMoney(String currency, double amount) {
@@ -40,4 +51,34 @@ public class Wallet {
         return s.getAmount();
     }
 
+    public double getTotalMoney(String currency) {
+        int d = 0;
+        for(String s : money.keySet()){
+            if (s.equals(currency)) {
+                d += money.get(s).getAmount()*100;
+            } else {
+
+                d += bank.convert(money.get(s).getAmount(), s, currency)*100;
+            }
+        }
+        return d/100.00;
+    }
+
+    @Override
+    public String toString(){
+        ArrayList<String> keys = new ArrayList<>(money.size());
+        keys.addAll(money.keySet());
+
+        Collections.sort(keys);
+
+        StringBuilder s = new StringBuilder("{ ");
+
+        for(String key: keys) {
+            s.append(money.get(key).getAmount()).append(" ").append(key).append(", ");
+        }
+
+        s.delete(s.length()-2, s.length()-1);
+        s.append("}");
+        return s.toString();
+    }
 }

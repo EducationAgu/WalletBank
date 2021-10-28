@@ -26,7 +26,7 @@ public class Summary {
     }
 
     public double getAmount() {
-        return (100*Main+Sub)/100;
+        return (100*Main+Sub)/100.00;
     }
 
     public void remove(double amount) {

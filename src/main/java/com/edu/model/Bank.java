@@ -1,9 +1,11 @@
 package com.edu.model;
 
+import com.edu.interfaces.Converter;
+
 import java.util.HashSet;
 import java.util.Random;
 
-public class Bank {
+public class Bank implements Converter {
 
     private HashSet<String> currencies;
 
@@ -15,10 +17,12 @@ public class Bank {
         currencies.add(c);
     }
 
-    public double convert(Summary amount, String from, String to) {
+    public double convert(double amount, String from, String to) {
+        if (from.equals(to)) {
+            return amount;
+        }
         Random rnd = new Random();
         int delta = (int) (rnd.nextFloat()*100);
-        return (((amount.Main*100)+(amount.Sub))*delta)/100;
+        return (amount*delta)/100.00;
     }
-
 }
